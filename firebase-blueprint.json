@@ -1,0 +1,227 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user basic information and global stats.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "age": { "type": "number" },
+        "school": { "type": "string" },
+        "ikigai": { "type": "string", "description": "Purpose/goal statement" },
+        "syllabusStream": { "type": "string", "description": "e.g., NEET, JEE, CBSE" },
+        "streak": { "type": "number", "description": "Current daily study streak" },
+        "xp": { "type": "number", "description": "Experience points for the balance score" },
+        "level": { "type": "number", "description": "User level based on XP" },
+        "dailyGoalMinutes": { "type": "number", "default": 120 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "TestRecord": {
+      "title": "Test Record",
+      "description": "Logs performance results of a test attempt.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "score": { "type": "number" },
+        "totalMarks": { "type": "number" },
+        "accuracy": { "type": "number" },
+        "timeTaken": { "type": "number", "description": "Duration in minutes" },
+        "date": { "type": "string", "format": "date" },
+        "reflections": { "type": "string", "description": "Mistakes and learnings" },
+        "aiInsights": { "type": "string", "description": "AI-generated improvement suggestions" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "subject", "score"]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Represents a subject in the user's syllabus.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "icon": { "type": "string", "description": "Lucide icon name" },
+        "color": { "type": "string", "description": "Hex or tailwind color class" },
+        "completedChapters": { "type": "number" },
+        "totalChapters": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name"]
+    },
+    "Chapter": {
+      "title": "Chapter",
+      "description": "A chapter within a subject.",
+      "type": "object",
+      "properties": {
+        "subjectId": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "isCompleted": { "type": "boolean" },
+        "order": { "type": "number" }
+      },
+      "required": ["subjectId", "userId", "name"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "A study task or goal for the planner.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "subject": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "scheduledDate": { "type": "string", "format": "date" },
+        "isCompleted": { "type": "boolean" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+        "duration": { "type": "number", "description": "Estimated duration in minutes" },
+        "type": { "type": "string", "enum": ["study", "revision"] },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title"]
+    },
+    "PomodoroSession": {
+      "title": "Pomodoro Session",
+      "description": "Logs focused study sessions.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "duration": { "type": "number", "description": "Duration in minutes" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["focus", "break"] }
+      },
+      "required": ["userId", "duration"]
+    },
+    "WellnessMetric": {
+      "title": "Wellness Metric",
+      "description": "Tracking wellness data.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "sleepHours": { "type": "number" },
+        "screenTimeMinutes": { "type": "number" },
+        "ikigaiScore": { "type": "number" },
+        "mood": { "type": "string" }
+      },
+      "required": ["userId", "date"]
+    },
+    "Chat": {
+      "title": "Chat Conversation",
+      "description": "Stores AI Tutor conversation metadata.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "lastMessage": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "Individual message in a conversation.",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "content": { "type": "string" },
+        "feedback": { "type": "string", "enum": ["up", "down"], "description": "Optional user feedback" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["role", "content"]
+    },
+    "SyllabusProgress": {
+      "title": "Syllabus Progress",
+      "description": "Tracking completion of topics within a chapter.",
+      "type": "object",
+      "properties": {
+        "completedTopics": { "type": "array", "items": { "type": "string" } },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["completedTopics"]
+    },
+    "SubjectSyllabus": {
+      "title": "Subject Syllabus",
+      "description": "Structure of a subject syllabus",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "units": { 
+          "type": "array", 
+          "items": { 
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "title": { "type": "string" },
+              "chapters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "title": { "type": "string" },
+                    "topics": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "subjects": {
+      "schema": "Subject",
+      "description": "User subjects"
+    },
+    "tasks": {
+      "schema": "Task",
+      "description": "Study tasks"
+    },
+    "pomodoro_sessions": {
+      "schema": "PomodoroSession",
+      "description": "Focus history"
+    },
+    "wellness": {
+      "schema": "WellnessMetric",
+      "description": "Daily wellness logs"
+    },
+    "tests": {
+      "schema": "TestRecord",
+      "description": "User test performance logs"
+    },
+    "chats": {
+      "schema": "Chat",
+      "description": "Conversation list"
+    },
+    "chats/{chatId}/messages": {
+      "schema": "ChatMessage",
+      "description": "Messages in a conversation"
+    },
+    "users/{userId}/syllabus_progress": {
+      "schema": "SyllabusProgress",
+      "description": "Completed topics per chapter"
+    },
+    "users/{userId}/custom_syllabi": {
+      "schema": "SubjectSyllabus",
+      "description": "User-defined syllabus structures for specific subjects"
+    }
+  }
+}
